@@ -1,32 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Bagikan Lokasi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Control</title>
 </head>
 <body>
-    <h1>Klik untuk Bagikan Lokasi Anda</h1>
-    <button onclick="sendLocation()">Bagikan Lokasi</button>
+    <h1>Camera Access Control</h1>
+    <button onclick="grantAccess()">Grant Access</button>
+    <button onclick="denyAccess()">Deny Access</button>
+    <div>
+        <h2>Live Camera Feed:</h2>
+        <img src="https://username.servonet.tech/video_feed" alt="Video Feed">
+    </div>
+
     <script>
-        function sendLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const data = {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    };
-                    fetch('http://your-server-ip:5000/track', {  // Ganti dengan IP server
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    }).then(response => response.json())
-                      .then(data => alert(data.status || data.error))
-                      .catch(error => console.error('Error:', error));
-                });
-            } else {
-                alert("Browser Anda tidak mendukung fitur lokasi.");
-            }
+        function grantAccess() {
+            fetch('https://username.servonet.tech/access', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ access: 'grant' })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error:', error));
+        }
+
+        function denyAccess() {
+            fetch('https://username.servonet.tech/access', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ access: 'deny' })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error:', error));
         }
     </script>
 </body>
