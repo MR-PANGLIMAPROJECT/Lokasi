@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bagikan Lokasi</title>
+</head>
+<body>
+    <h1>Klik untuk Bagikan Lokasi Anda</h1>
+    <button onclick="sendLocation()">Bagikan Lokasi</button>
+    <script>
+        function sendLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const data = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    };
+                    fetch('http://your-server-ip:5000/track', {  // Ganti dengan IP server
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    }).then(response => response.json())
+                      .then(data => alert(data.status || data.error))
+                      .catch(error => console.error('Error:', error));
+                });
+            } else {
+                alert("Browser Anda tidak mendukung fitur lokasi.");
+            }
+        }
+    </script>
+</body>
+</html>
